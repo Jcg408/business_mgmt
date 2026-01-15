@@ -14,15 +14,15 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV.fetch("PGDATABASE", "day_spa_development") %>
+  database: <%= ENV.fetch("PGDATABASE", "business_mgmt_development") %>
 
 test:
   <<: *default
-  database: <%= ENV.fetch("PGDATABASE_TEST", "day_spa_test") %>
+  database: <%= ENV.fetch("PGDATABASE_TEST", "business_mgmt_test") %>
 
 production:
   <<: *default
-  database: <%= ENV.fetch("PGDATABASE_PRODUCTION", "day_spa_production") %>
+  database: <%= ENV.fetch("PGDATABASE_PRODUCTION", "business_mgmt_production") %>
   username: <%= ENV.fetch("PGUSER_PRODUCTION", ENV.fetch("PGUSER", "postgres")) %>
   password: <%= ENV.fetch("PGPASSWORD_PRODUCTION", ENV.fetch("PGPASSWORD", "")) %>
   host: <%= ENV.fetch("PGHOST_PRODUCTION", ENV.fetch("PGHOST", "localhost")) %>
