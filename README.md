@@ -1,31 +1,54 @@
 # Beauty Business Management System
 
-A comprehensive business management platform designed specifically for the beauty industry, including cosmetology and esthetics professionals. This Rails application provides multi-tenant capabilities, allowing each business to configure their own services, staff, and scheduling preferences.
+A comprehensive business management platform designed specifically for the beauty industry, including cosmetology and esthetics professionals. This Rails application provides multi-tenant capabilities at the organization level, allowing multiple businesses to be managed under a single organizational umbrella with flexible role-based access control.
 
 ## Overview
 
-This system empowers beauty businesses to:
-- Manage multiple locations and staff members
-- Configure custom service offerings (haircuts, coloring, facials, waxing, etc.)
-- Handle appointment scheduling with role-based access control
-- Track clients and their appointment history
-- Manage inventory and supplier relationships
-- Track products used in services
+This system empowers beauty business organizations to:
+- Manage multiple business locations under one organization
+- Configure custom service offerings per business (haircuts, coloring, facials, waxing, etc.)
+- Handle appointment scheduling with granular role-based permissions
+- Track clients and their appointment history across locations
+- Manage staff across multiple business locations
+- Control inventory and supplier relationships
+- Provide organization owners with centralized oversight
 
 ## Core Features
 
-### Multi-Tenant Business Management
-- Each business operates independently with its own configuration
-- Business admins can customize what services they offer
-- Support for multiple locations per business
-- Custom role configuration for staff members
+### Multi-Tenant Organization Structure
+- **Three-tier hierarchy**: Organization → Businesses → Employees
+- Organizations own and manage multiple business locations
+- Each business operates with independent configuration while sharing organizational resources
+- Organization owners have full oversight across all locations
+- Business admins can manage their specific location
+- Employees can work at multiple business locations with different roles at each
 
-### Intelligent Scheduling System
-- Role-based appointment scheduling
-- Staff can book appointments based on their assigned permissions
-- Calendar integration for viewing and managing appointments
-- Conflict detection and availability management
-- Client appointment history tracking
+### Intelligent Landing Experience
+- **Organization Owners**: Dashboard view with business selection cards, organizational statistics, and quick access to all locations
+- **Business Employees**: Direct access to their primary business location dashboard with role-appropriate tools
+- Dynamic navigation based on user permissions
+
+### Role-Based Access Control
+- **Organization Owner**: Full access to all businesses, can create/edit organizations and businesses
+- **Business Admin**: Manage specific business location, staff, clients, and resources
+- **Manager**: Reserved for future implementation
+- **Staff**: Basic access to scheduling and client management at assigned location(s)
+
+### Business Management
+- Create and manage multiple business locations within an organization
+- Each business can have unique:
+  - Name and branding
+  - Physical locations (primary, branch, billing, shipping)
+  - Contact information (phone numbers with types: main, mobile, fax, work, home)
+  - Active/inactive status
+  - Employee roster with location-specific roles
+
+### Staff Management
+- Employees belong to organizations but work at specific businesses
+- Many-to-many relationship: employees can work at multiple business locations
+- Role assignment per business location (admin, manager, or staff)
+- Primary business designation for default landing page
+- Secure authentication with encrypted passwords
 
 ### Service Configuration
 - Flexible service catalog that businesses can customize
@@ -35,25 +58,20 @@ This system empowers beauty businesses to:
   - Nail services
   - Spa services
   - And more...
-- Service duration and pricing management
-- Staff skill assignments (which staff can perform which services)
-
-### Staff & Role Management
-- Configurable roles and permissions
-- Business admin can set what each role can do
-- Employee profiles with service specializations
-- Schedule and availability tracking
+- Service duration and pricing management (planned)
+- Staff skill assignments (planned)
 
 ### Client Management
 - Client profiles and contact information
-- Appointment history
-- Service preferences
-- Notes and special requirements
+- Appointment history (planned)
+- Service preferences (planned)
+- Notes and special requirements (planned)
 
 ### Inventory & Suppliers
-- Product tracking
-- Supplier management
-- Inventory levels and reordering
+- Product tracking with usage notes
+- Supplier management with contact details
+- Stock quantity monitoring
+- Inventory levels and reordering (planned)
 
 ## Technology Stack
 
@@ -71,26 +89,81 @@ This system empowers beauty businesses to:
 
 🚧 **In Active Development** 🚧
 
-This application is in early-stage development. Core models have been scaffoled and the foundation is being established.
+This application is in early-stage development with the foundation and permission system now established.
 
 ### Completed
-- ✅ Core data models (Business, Employee, Client, Service, Product, Supplier)
-- ✅ Database schema setup
-- ✅ Basic authentication structure
-- ✅ Rails 8.1 modern asset pipeline
+- ✅ Core data models (Organization, Business, Employee, Client, Service, Product, Supplier, Location, Phone)
+- ✅ PostgreSQL database schema with UUID primary keys
+- ✅ Multi-tenant organization structure (Organization → Businesses → Employees)
+- ✅ Business-Employee many-to-many relationship with roles
+- ✅ Complete authentication system with session management
+- ✅ Role-based access control and authorization system
+- ✅ Organization owner permissions and dashboard
+- ✅ Business CRUD operations with nested location and phone management
+- ✅ Employee CRUD operations
+- ✅ Client CRUD operations
+- ✅ Organization management interface
+- ✅ Dynamic landing pages based on user role
+- ✅ Responsive UI with TailwindCSS
+- ✅ Rails 8.1 modern asset pipeline (Propshaft)
 
 ### In Progress
-- 🔄 Role-based access control system
-- 🔄 Business configuration interface
 - 🔄 Service catalog management
+- 🔄 Business-specific service configuration
 
-### Planned
-- 📋 Calendar/scheduling system integration
-- 📋 Appointment booking workflow
+### Next Priority: Scheduling System (Phase 2)
+- 📋 Calendar gem integration evaluation (Simple Calendar, FullCalendar, or ice_cube)
+- 📋 Appointment model and booking workflow
 - 📋 Staff availability management
-- 📋 Client portal
-- 📋 Reporting and analytics
+- 📋 Role-based appointment booking permissions
+- 📋 Conflict detection and double-booking prevention
+
+### Planned Features
+- 📋 Service duration and pricing
+- 📋 Staff skill/service assignments
+- 📋 Client appointment history
+- 📋 Client self-service portal
+- 📋 Online booking system
+- 📋 Appointment reminders
+- 📋 Reporting and analytics dashboard
 - 📋 Payment processing integration
+
+## Data Architecture
+
+### Organization Model
+- Root entity for multi-tenant system
+- Has one owner (Employee)
+- Has many businesses and employees
+- Attributes: name, description, active status
+
+### Business Model
+- Belongs to an Organization
+- Has many employees through business_employees join table
+- Has polymorphic locations and phones
+- Attributes: name, active status
+
+### Employee Model
+- Belongs to an Organization
+- Has many businesses through business_employees
+- Has secure password authentication
+- Can work at multiple businesses with different roles
+- One primary business for default landing
+
+### BusinessEmployee Join Table
+- Links employees to businesses with role and location info
+- Role enum: staff (0), manager (1), admin (2)
+- Primary location flag for employee's default business
+- Active status flag
+
+### Location Model (Polymorphic)
+- Can belong to Business or Employee
+- Type enum: primary, billing, shipping, home, branch
+- Full address fields
+
+### Phone Model (Polymorphic)
+- Can belong to Business or Employee  
+- Type enum: mobile, work, home, fax, main, other
+- Phone number and optional extension
 
 ## Getting Started
 
@@ -101,20 +174,42 @@ This application is in early-stage development. Core models have been scaffoled 
 - Node.js (for asset compilation)
 - Redis (optional, for production caching)
 
-### Installation
 
-1. Clone the repository:
-```bash
-git clone [repository-url]
-cd business_mgmt
+# Run with coverage
+COVERAGE=true bundle exec rspec
 ```
 
-2. Install dependencies:
+### Code Quality
+
 ```bash
-bundle install
+# Run linter (Rails Omakase ruleset)
+bin/rubocop -A
+
+# Security scanning
+bin/brakeman
+
+# Check for vulnerable dependencies
+bin/bundler-audit
 ```
 
-3. Setup the database:
+## Key Architectural Decisions
+
+### Multi-Tenant Design
+- Organizations are isolated - businesses cannot be transferred between organizations
+- Employee roles are business-specific, allowing flexibility across locations
+- Authorization checks verify both organization ownership and business-level permissions
+
+### Security & Permissions
+- Organization owners have full access to all their businesses
+- Business admins can manage resources but cannot create new businesses
+- Employees can only edit their own profiles unless they have admin rights
+- All destructive actions require appropriate permission level
+
+### UI/UX Patterns
+- Organization owners see a business selection dashboard on login
+- Business employees land directly on their primary business dashboard
+- Dynamic navigation and role badges based on current context
+- Confirmation dialogs for destructive actionsSetup the database:
 ```bash
 bin/rails db:create
 bin/rails db:migrate
@@ -133,35 +228,43 @@ The application will be available at `http://localhost:3000`
 ```bash
 # Run full test suite
 bundle exec rspec
-
-# Run specific test types
-bundle exec rspec spec/models
-bundle exec rspec spec/system
-bundle exec rspec spec/controllers
-```
-
-### Code Quality
-
-```bash
-# Run linter
-bin/rubocop -A
-
-# Security scanning
-bin/brakeman
-
-# Check for vulnerable dependencies
-bin/bundler-audit
-```
-
-## Development Roadmap
-
-### Phase 1: Foundation (Current)
+✅ (Completed)
 - Core data models and associations
-- Authentication and authorization
-- Basic CRUD operations
-- Role management system
+- Organization → Business → Employee hierarchy
+- Authentication and authorization system
+- Complete CRUD operations for all entities
+- Role-based permissions and access control
+- Organization and business management interfaces
+- Dynamic landing pages
 
-### Phase 2: Scheduling (Next Priority)
+### Phase 2: Scheduling System 📋 (Next Priority)
+- Evaluate and integrate calendar solution
+- Appointment model with booking workflow
+- Staff availability configuration
+- Role-based booking permissions
+- Conflict detection and validation
+- Appointment history tracking
+
+### Phase 3: Business Configuration
+- Service catalog customization per business
+- Service pricing and duration management
+- Staff skill/service assignments
+- Business settings and preferences
+- Advanced multi-location features
+
+### Phase 4: Client Experience
+- Client self-service portal
+- Online booking interface
+- Appointment reminders (email/SMS)
+- Service history and preferences
+- Loyalty program integration
+
+### Phase 5: Business Intelligence
+- Revenue and sales analytics
+- Staff performance metrics
+- Client retention insights
+- Appointment trends and forecasting
+- Inventory usage reporNext Priority)
 - Calendar gem integration (evaluating Simple Calendar, FullCalendar, or ice_cube)
 - Appointment booking workflow
 - Staff availability management

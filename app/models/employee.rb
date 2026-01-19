@@ -26,6 +26,11 @@ class Employee < ApplicationRecord
     organization.owner_id == id
   end
   
+  def owned_organization
+    return nil unless organization_owner?
+    organization
+  end
+  
   # Business-level permission checks
   def business_admin_at?(business)
     emp_role(business)&.admin?

@@ -1,0 +1,27 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Edit Organization</h1>
+    <p class="mt-2 text-sm text-gray-600">Update organization details and manage ownership.</p>
+  </div>
+
+  <!-- Form -->
+  <%= form_with(model: @organization, class: "space-y-6") do |f| %>
+    <%= render "form", f: f %>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+      <div>
+        <%= button_to "Delete Organization", 
+              organization_path(@organization), 
+              method: :delete, 
+              data: { turbo_confirm: "Are you sure? This will delete the organization and all its businesses. This action cannot be undone." },
+              class: "px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-300 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+      </div>
+      <div class="flex items-center gap-4">
+        <%= link_to "Cancel", organization_path(@organization), class: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        <%= f.submit "Update Organization", class: "px-6 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      </div>
+    </div>
+  <% end %>
+</div>

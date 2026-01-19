@@ -9,7 +9,7 @@ module MultiTenancy
   private
 
   def current_business
-    @current_business ||= current_employee&.business
+    @current_business ||= current_employee&.primary_business
   end
 
   def set_current_business

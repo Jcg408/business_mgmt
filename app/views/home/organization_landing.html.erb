@@ -1,0 +1,173 @@
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Organization Header -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900"><%= @organization.name %></h1>
+        <p class="mt-2 text-gray-600">Welcome back, <%= current_employee.name %>! Select a business to manage.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to "Organization Settings", organization_path(@organization), class: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50" %>
+        <%= link_to "Add Business", new_business_path, class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Overview -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Businesses</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @businesses.count %></p>
+        </div>
+        <div class="p-3 bg-blue-50 rounded-lg">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Active Businesses</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @businesses.where(active: true).count %></p>
+        </div>
+        <div class="p-3 bg-green-50 rounded-lg">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Employees</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @organization.employees.count %></p>
+        </div>
+        <div class="p-3 bg-purple-50 rounded-lg">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Locations</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2"><%= @businesses.sum { |b| b.locations.count } %></p>
+        </div>
+        <div class="p-3 bg-orange-50 rounded-lg">
+          <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Selection Grid -->
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Select a Business</h2>
+  </div>
+
+  <% if @businesses.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @businesses.each do |business| %>
+        <%= link_to business_path(business), class: "block bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200" do %>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1"><%= business.name %></h3>
+                <% primary_location = business.locations.find_by(location_type: :primary) %>
+                <% if primary_location %>
+                  <p class="text-sm text-gray-500">
+                    <%= primary_location.city %><%= primary_location.state ? ", #{primary_location.state}" : "" %>
+                  </p>
+                <% end %>
+              </div>
+              <span class="<%= business.active? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %> px-2 py-1 rounded-full text-xs font-semibold">
+                <%= business.active? ? 'Active' : 'Inactive' %>
+              </span>
+            </div>
+
+            <div class="border-t border-gray-100 pt-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Employees</p>
+                  <p class="text-lg font-semibold text-gray-900"><%= business.employees.count %></p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Locations</p>
+                  <p class="text-lg font-semibold text-gray-900"><%= business.locations.count %></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center text-blue-600 text-sm font-medium">
+              <span>Manage Business</span>
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+      <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+      </svg>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No businesses yet</h3>
+      <p class="text-gray-500 mb-6">Get started by creating your first business location.</p>
+      <%= link_to "Create Your First Business", new_business_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700" %>
+    </div>
+  <% end %>
+
+  <!-- Quick Actions -->
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <%= link_to employees_path, class: "flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow" do %>
+      <div class="p-3 bg-purple-50 rounded-lg mr-4">
+        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900">Manage Employees</h4>
+        <p class="text-sm text-gray-500">View all employees across businesses</p>
+      </div>
+    <% end %>
+
+    <%= link_to businesses_path, class: "flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow" do %>
+      <div class="p-3 bg-blue-50 rounded-lg mr-4">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900">All Businesses</h4>
+        <p class="text-sm text-gray-500">View detailed list of all locations</p>
+      </div>
+    <% end %>
+
+    <%= link_to clients_path, class: "flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow" do %>
+      <div class="p-3 bg-green-50 rounded-lg mr-4">
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900">Manage Clients</h4>
+        <p class="text-sm text-gray-500">View client database</p>
+      </div>
+    <% end %>
+  </div>
+</div>

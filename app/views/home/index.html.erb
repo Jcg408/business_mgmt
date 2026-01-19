@@ -4,10 +4,10 @@
       <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
         <div class="px-4 py-5 sm:px-6">
           <h3 class="text-lg leading-6 font-medium text-gray-900">
-            <%= current_business.name %>
+            <%= @business.name %>
           </h3>
           <p class="mt-1 max-w-2xl text-sm text-gray-500">
-            Hello, <%= current_employee.name %>! &middot; <span class="font-semibold"><%= current_employee.role.titleize %></span>
+            Hello, <%= current_employee.name %>! &middot; <span class="font-semibold"><%= @business_role&.role&.titleize || 'Staff' %></span>
           </p>
         </div>
       </div>
@@ -24,17 +24,17 @@
         <% end %>
       </div>
 
-      <% if current_employee.admin? %>
+      <% if @business_role&.admin? %>
         <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4">
           <div class="flex">
             <div class="ml-3">
               <p class="text-sm text-yellow-700">
-                You have <strong>admin</strong> privileges.
+                You have <strong>admin</strong> privileges at this location.
               </p>
             </div>
           </div>
         </div>
-      <% elsif current_employee.manager? %>
+      <% elsif @business_role&.manager? %>
         <div class="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4">
           <div class="flex">
             <div class="ml-3">
