@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   
-  resources :businesses, only: [:show, :update]
+  resources :businesses
   resources :employees
   resources :clients
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

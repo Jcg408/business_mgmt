@@ -24,9 +24,9 @@
   </head>
 
   <body>
-    <nav class="bg-gray-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+    <nav class="bg-gray-800 h-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div class="flex items-center justify-between h-full">
           <div class="flex items-center">
             <div class="shrink-0">
               <% if logged_in? %>
@@ -42,8 +42,8 @@
                 <%= current_employee.name %> 
                 <span class="text-xs text-gray-400">(<%= current_employee.role %>)</span>
               </span>
-              <%= button_to "Logout", logout_path, method: :delete, 
-                  class: "bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium" %>
+              <%= button_to "Log Out", logout_path, method: :delete, 
+                  class: "bg-red-600 hover:bg-red-700 text-white px-3 py-2 my-rounded-md text-sm font-medium" %>
             <% else %>
               <%= link_to "Log In", login_path, 
                   class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium" %>
