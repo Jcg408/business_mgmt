@@ -39,3 +39,4 @@
 
 # Ignore Copilot instructions (project-specific AI context)
 /.github/copilot-instructions.md
+/.vscode/settings.json
